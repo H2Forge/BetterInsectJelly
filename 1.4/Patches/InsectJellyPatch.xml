@@ -1,0 +1,31 @@
+<Patch>
+    <Operation Class="PatchOperationReplace">
+		<xpath>Defs/ThingDef[defName="InsectJelly"]/statBases/MarketValue</xpath>
+			<value>
+				<MarketValue>16.0</MarketValue>
+			</value>
+	</Operation>
+	
+	<Operation Class="PatchOperationReplace">
+		<xpath>Defs/ThingDef[defName="InsectJelly"]/statBases/Nutrition</xpath>
+			<value>
+				<Nutrition>0.1</Nutrition>
+			</value>
+	</Operation>
+	
+	<Operation Class="PatchOperationRemove">
+		<xpath>Defs/ThingDef[defName="InsectJelly"]/statBases/FoodPoisonChanceFixedHuman</xpath>
+	</Operation>
+	
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/ThingDef[defName="InsectJelly"]/ingestible</xpath>
+			<value>
+				<outcomeDoers>
+					<li Class="IngestionOutcomeDoer_OffsetNeed">
+						<need>Rest</need>
+						<offset>0.025</offset>
+					</li>
+				</outcomeDoers>
+			</value>
+	</Operation>
+</Patch>
