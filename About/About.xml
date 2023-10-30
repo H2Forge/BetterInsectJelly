@@ -3,9 +3,7 @@
     <packageId>H2Forge.betterInsectJelly</packageId>
     <name>Better Insect Jelly</name>
     <author>H2Forge</author>
-    <description>
-		Add description
-    </description>
+    <description> A list of settings allowing users to customize various properties of insect jelly, perfect for Insect Supremacy Colonies. Insect jelly is  also given a adjustable, natural stimulating effect.</description>
     <supportedVersions>
         <li>1.4</li>
     </supportedVersions>

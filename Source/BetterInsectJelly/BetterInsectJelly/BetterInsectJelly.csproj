@@ -42,14 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="BetterInsectJellyMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Rimworld.Ref">
       <Version>1.4.3704</Version>
     </PackageReference>
-    <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib">
+    <PackageReference Include="UnlimitedHugs.Rimworld.HugsLib" ExcludeAssets="runtime">
       <Version>10.0.1</Version>
     </PackageReference>
   </ItemGroup>
