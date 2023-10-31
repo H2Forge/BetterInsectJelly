@@ -44,7 +44,23 @@ namespace BetterInsectJelly
         {
             return "BetterInsectJelly".Translate();
         }
+
+        public override void WriteSettings()
+        {
+            base.WriteSettings();
+
+            ThingDef InsectJelly = DefDatabase<ThingDef>.GetNamed("InsectJelly");
+            foreach (StatModifier a in InsectJelly.statBases)
+            {
+                if (a.stat == StatDefOf.Nutrition)
+                {
+                    a.value = settings.InsectJellyNutrition;
+                }
+            };
+        }
     }
+
+ 
 
     public class Settings : ModSettings
     {
