@@ -60,6 +60,7 @@ namespace BetterInsectJelly
             ls.Gap(20f);
             ls.GapLine();
             ls.CheckboxLabeled("Vanilla Cooking Expanded (Insect Jelly Preserve)", ref settings.applyToInsectJellyPreserve);
+            AddSettingsNumberLine(ls, "Rest fall rate Offset as Ingredient", 0f, 0.20f, ref settings.preserveAsIngredientOffset, 0f, 1f);
             ls.GapLine();
 
             ls.Gap(20f);
@@ -93,6 +94,8 @@ namespace BetterInsectJelly
             settings.InsectJellyValue = 0.8f;
             settings.InsectJellyJoy = 0.08f;
             settings.InsectJellyFoodPoisonChance = 0.02f;
+            settings.InsectJellyRestOffset = 0f;
+            settings.preserveAsIngredientOffset = 0f;
             settings.factorRoyalInsectJelly = 1f;
 
         }
@@ -103,6 +106,8 @@ namespace BetterInsectJelly
             settings.InsectJellyValue = 0.16f;
             settings.InsectJellyJoy = 0.16f;
             settings.InsectJellyFoodPoisonChance = 0f;
+            settings.InsectJellyRestOffset = 0.025f;
+            settings.preserveAsIngredientOffset = 0.20f;
             settings.factorRoyalInsectJelly = 2f;
         }
         public override string SettingsCategory()
@@ -121,11 +126,10 @@ namespace BetterInsectJelly
                 InsectJelly.statBases.Find(x => x.stat == StatDefOf.MarketValue).value = settings.InsectJellyValue;
                 InsectJelly.statBases.Find(x => x.stat == StatDefOf.FoodPoisonChanceFixedHuman).value = settings.InsectJellyFoodPoisonChance;
                 InsectJelly.ingestible.joy = settings.InsectJellyJoy;
-
+                InsectJelly.ingestible.outcomeDoers.Find(x => x.GetType() == typeof(IngestionOutcomeDoer_OffsetNeed)).ChangeType<IngestionOutcomeDoer_OffsetNeed>().offset = settings.InsectJellyRestOffset;
                 /* This piece of code
                  * Compiler complains since i is outcomeDoer and not it's derived type outComeDoer_OffsetNeed
                  * Thank you to the people who created the ChangeType method.
-                */
                 foreach(var i in InsectJelly.ingestible.outcomeDoers)
                 {
                     if(i.GetType() == typeof(IngestionOutcomeDoer_OffsetNeed))
@@ -133,26 +137,29 @@ namespace BetterInsectJelly
                         i.ChangeType<IngestionOutcomeDoer_OffsetNeed>().offset = settings.InsectJellyRestOffset;
                     }
                 }
+                */
             }
 
-            /*
-
-            ThingDef InsectJellyPreserve = DefDatabase<ThingDef>.GetNamed("VCE_InsectJellyPreserves");
+            ThingDef InsectJellyPreserve = DefDatabase<ThingDef>.GetNamed("VCE_InsectJellyPreserves", errorOnFail:false);
+            HediffDef consumedPreserveIngredient = DefDatabase<HediffDef>.GetNamed("H2F_VCE_ConsumedInsectJellyPreserve");
             if (InsectJellyPreserve != null && settings.applyToInsectJellyPreserve)
             {
                 InsectJellyPreserve.statBases.Find(x => x.stat == StatDefOf.Nutrition).value = settings.InsectJellyNutrition;
                 InsectJellyPreserve.statBases.Find(x => x.stat == StatDefOf.MarketValue).value = settings.InsectJellyValue;
                 InsectJellyPreserve.ingestible.joy = settings.InsectJellyJoy;
+                InsectJellyPreserve.ingestible.outcomeDoers.Find(x => x.GetType() == typeof(IngestionOutcomeDoer_OffsetNeed)).ChangeType<IngestionOutcomeDoer_OffsetNeed>().offset = settings.InsectJellyRestOffset;
+                consumedPreserveIngredient.stages.First().restFallFactorOffset = settings.preserveAsIngredientOffset;
             }
-            /*
-            ThingDef RoyalInsectJelly = DefDatabase<ThingDef>.GetNamed("VFEI_RoyalInsectJelly");
+
+            ThingDef RoyalInsectJelly = DefDatabase<ThingDef>.GetNamed("VFEI_RoyalInsectJelly", errorOnFail:false);
             if (RoyalInsectJelly != null && settings.applyToRoyalInsectJelly)
             {
                 RoyalInsectJelly.statBases.Find(x => x.stat == StatDefOf.Nutrition).value = settings.InsectJellyNutrition;
                 RoyalInsectJelly.statBases.Find(x => x.stat == StatDefOf.MarketValue).value = settings.factorRoyalInsectJelly * settings.InsectJellyValue;
                 RoyalInsectJelly.ingestible.joy = settings.factorRoyalInsectJelly * settings.InsectJellyJoy;
+                RoyalInsectJelly.ingestible.outcomeDoers.Find(x => x.GetType() == typeof(IngestionOutcomeDoer_OffsetNeed)).ChangeType<IngestionOutcomeDoer_OffsetNeed>().offset = settings.factorRoyalInsectJelly * settings.InsectJellyRestOffset;
+
             }
-            */
 
             base.WriteSettings();
         }
@@ -169,6 +176,8 @@ namespace BetterInsectJelly
         public float InsectJellyRestOffset = 0.025f;
 
         public bool applyToInsectJellyPreserve = true;
+        public float preserveAsIngredientOffset = 0.20f;
+
         public bool applyToRoyalInsectJelly = true;
         public float factorRoyalInsectJelly = 2.00f;
 
@@ -181,6 +190,7 @@ namespace BetterInsectJelly
             Scribe_Values.Look(ref InsectJellyJoy, "InsectJellyJoy", 0.16f);
             Scribe_Values.Look(ref InsectJellyRestOffset, "InsectJellyRestOffset", 0.025f);
             Scribe_Values.Look(ref applyToInsectJellyPreserve, "applyToInsectJellyPreserve", true);
+            Scribe_Values.Look(ref preserveAsIngredientOffset, "preserveAsIngredientOffset", 0.20f);
             Scribe_Values.Look(ref applyToRoyalInsectJelly, "applyToRoyalInsectJelly", true);
             Scribe_Values.Look(ref factorRoyalInsectJelly, "factorRoyalInsectJelly", 2.00f);
             base.ExposeData();
