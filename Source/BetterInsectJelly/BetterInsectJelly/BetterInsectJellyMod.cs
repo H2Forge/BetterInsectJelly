@@ -55,23 +55,17 @@ namespace BetterInsectJelly
             AddSettingsNumberLine(ls, "Insect Jelly Market Value", 8f, 16f, ref settings.InsectJellyValue, 0f, 100f);
             AddSettingsNumberLine(ls, "Insect Jelly Food Poison Chance", 0.02f, 0f, ref settings.InsectJellyFoodPoisonChance, 0f, 1f);
             AddSettingsNumberLine(ls, "Insect Jelly Joy", 0.08f, 0.16f, ref settings.InsectJellyJoy, 0f, 1f);
-            //AddSettingsNumberLine(ls, "Insect Jelly Rest Offset per unit", 0f, 0.025f, ref settings.InsectJellyRestOffset, 0f, 1f);
+            AddSettingsNumberLine(ls, "Insect Jelly Rest Offset per unit", 0f, 0.025f, ref settings.InsectJellyRestOffset, 0f, 1f);
+
+            ls.Gap(20f);
             ls.GapLine();
+            ls.CheckboxLabeled("Vanilla Cooking Expanded (Insect Jelly Preserve)", ref settings.applyToInsectJellyPreserve);
             ls.GapLine();
 
-            ls.Gap(2f);
-            ls.Label("Vanilla Cooking Expanded (Insect Jelly Preserve)");
+            ls.Gap(20f);
             ls.GapLine();
-            ls.CheckboxLabeled("Apply to Insect Jelly Preserve", ref settings.applyToInsectJellyPreserve);
-            ls.GapLine();
-            ls.GapLine();
-
-            ls.Gap(2f);
-            ls.Label("Vanilla Factions Expanded - Insectoids (Royal Insect Jelly)");
-            ls.GapLine();
-            ls.CheckboxLabeled("Apply to Royal Insect Jelly", ref settings.applyToRoyalInsectJelly);
+            ls.CheckboxLabeled("Vanilla Factions Expanded - Insectoids (Royal Insect Jelly)", ref settings.applyToRoyalInsectJelly);
             AddSettingsNumberLine(ls, "Multiplier for Royal Insect Jelly stats", 0f, 0.05f, ref settings.factorRoyalInsectJelly, 0f, 5f);
-            ls.GapLine();
             ls.GapLine();
 
             ls.End();
@@ -109,7 +103,7 @@ namespace BetterInsectJelly
             settings.InsectJellyValue = 0.16f;
             settings.InsectJellyJoy = 0.16f;
             settings.InsectJellyFoodPoisonChance = 0f;
-            settings.factorRoyalInsectJelly = 1f;
+            settings.factorRoyalInsectJelly = 2f;
         }
         public override string SettingsCategory()
         {
@@ -127,6 +121,18 @@ namespace BetterInsectJelly
                 InsectJelly.statBases.Find(x => x.stat == StatDefOf.MarketValue).value = settings.InsectJellyValue;
                 InsectJelly.statBases.Find(x => x.stat == StatDefOf.FoodPoisonChanceFixedHuman).value = settings.InsectJellyFoodPoisonChance;
                 InsectJelly.ingestible.joy = settings.InsectJellyJoy;
+
+                /* This piece of code
+                 * Compiler complains since i is outcomeDoer and not it's derived type outComeDoer_OffsetNeed
+                 * Thank you to the people who created the ChangeType method.
+                */
+                foreach(var i in InsectJelly.ingestible.outcomeDoers)
+                {
+                    if(i.GetType() == typeof(IngestionOutcomeDoer_OffsetNeed))
+                    {
+                        i.ChangeType<IngestionOutcomeDoer_OffsetNeed>().offset = settings.InsectJellyRestOffset;
+                    }
+                }
             }
 
             /*
@@ -136,10 +142,9 @@ namespace BetterInsectJelly
             {
                 InsectJellyPreserve.statBases.Find(x => x.stat == StatDefOf.Nutrition).value = settings.InsectJellyNutrition;
                 InsectJellyPreserve.statBases.Find(x => x.stat == StatDefOf.MarketValue).value = settings.InsectJellyValue;
-                InsectJellyPreserve.statBases.Find(x => x.stat == StatDefOf.FoodPoisonChanceFixedHuman).value = settings.InsectJellyFoodPoisonChance;
                 InsectJellyPreserve.ingestible.joy = settings.InsectJellyJoy;
             }
-
+            /*
             ThingDef RoyalInsectJelly = DefDatabase<ThingDef>.GetNamed("VFEI_RoyalInsectJelly");
             if (RoyalInsectJelly != null && settings.applyToRoyalInsectJelly)
             {
@@ -161,7 +166,7 @@ namespace BetterInsectJelly
         public float InsectJellyValue = 16.00f;
         public float InsectJellyFoodPoisonChance = 0.02f;
         public float InsectJellyJoy = 0.16f;
-        //public float InsectJellyRestOffset = 0.025f;
+        public float InsectJellyRestOffset = 0.025f;
 
         public bool applyToInsectJellyPreserve = true;
         public bool applyToRoyalInsectJelly = true;
@@ -174,7 +179,7 @@ namespace BetterInsectJelly
             Scribe_Values.Look(ref InsectJellyValue, "InsectJellyValue", 16.00f);
             Scribe_Values.Look(ref InsectJellyFoodPoisonChance, "InsectJellyFoodPoisonChance", 0.02f);
             Scribe_Values.Look(ref InsectJellyJoy, "InsectJellyJoy", 0.16f);
-            //Scribe_Values.Look(ref InsectJellyRestOffset, "InsectJellyRestOffset", 0.025f);
+            Scribe_Values.Look(ref InsectJellyRestOffset, "InsectJellyRestOffset", 0.025f);
             Scribe_Values.Look(ref applyToInsectJellyPreserve, "applyToInsectJellyPreserve", true);
             Scribe_Values.Look(ref applyToRoyalInsectJelly, "applyToRoyalInsectJelly", true);
             Scribe_Values.Look(ref factorRoyalInsectJelly, "factorRoyalInsectJelly", 2.00f);
