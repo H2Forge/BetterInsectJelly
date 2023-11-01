@@ -13,10 +13,6 @@
 			</value>
 	</Operation>
 	
-	<Operation Class="PatchOperationRemove">
-		<xpath>Defs/ThingDef[defName="InsectJelly"]/statBases/FoodPoisonChanceFixedHuman</xpath>
-	</Operation>
-	
 	<Operation Class="PatchOperationAdd">
 		<xpath>Defs/ThingDef[defName="InsectJelly"]/ingestible</xpath>
 			<value>

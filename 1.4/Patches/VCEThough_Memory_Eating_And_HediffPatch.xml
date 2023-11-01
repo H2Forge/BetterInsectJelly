@@ -19,7 +19,19 @@
 							<hediff>H2F_VCE_ConsumedInsectJellyPreserve</hediff>
 						</value>
 				</li>
-				
+
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/HediffDef[defName="H2F_VCE_ConsumedInsectJellyPreserve"]</xpath>
+						<value>
+							<comps>
+								<li Class="VanillaCookingExpanded.HediffCompProperties_WhileHavingThoughts">
+									<thoughtDefs>
+										<li>VCE_ConsumedInsectJelly</li>
+									</thoughtDefs>
+								</li>
+							</comps>
+						</value>
+				</li>
 			</operations>
 		</match>
 	</Operation>

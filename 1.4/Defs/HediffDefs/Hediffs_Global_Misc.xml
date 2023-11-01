@@ -12,13 +12,6 @@
 		<hediffClass>HediffWithComps</hediffClass>
 		<initialSeverity>1.0</initialSeverity>
 		<maxSeverity>1.0</maxSeverity>
-		<comps>
-			<li Class="VanillaCookingExpanded.HediffCompProperties_WhileHavingThoughts">
-				<thoughtDefs>
-					<li>VCE_ConsumedInsectJelly</li>
-				</thoughtDefs>
-			</li>
-		</comps>
 		<stages>
 			<li>   
 				 <restFallFactorOffset>-0.20</restFallFactorOffset>
